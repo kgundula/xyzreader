@@ -1,6 +1,5 @@
 package com.example.xyzreader.ui;
 
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
@@ -36,7 +35,7 @@ import butterknife.ButterKnife;
  * either contained in a {@link ArticleListActivity} in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
-public class ArticleDetailFragment extends Fragment implements
+public class ArticleDetailFragment extends RootFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ArticleDetailFragment";
 
@@ -71,6 +70,8 @@ public class ArticleDetailFragment extends Fragment implements
     private int mScrollY;
     private boolean mIsCard = false;
     private int mStatusBarFullOpacityBottom;
+
+    String share_title;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -139,7 +140,7 @@ public class ArticleDetailFragment extends Fragment implements
             public void onClick(View view) {
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
                         .setType("text/plain")
-                        .setText("Some sample text")
+                        .setText(share_title)
                         .getIntent(), getString(R.string.action_share)));
             }
         });
@@ -160,7 +161,7 @@ public class ArticleDetailFragment extends Fragment implements
                     (int) (Color.green(mMutedColor) * 0.9),
                     (int) (Color.blue(mMutedColor) * 0.9));
         }
-        //mStatusBarColorDrawable.setColor(color);
+        mStatusBarColorDrawable.setColor(color);
         //mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
     }
 
@@ -191,7 +192,8 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
-            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+            share_title = mCursor.getString(ArticleLoader.Query.TITLE);
+            titleView.setText(share_title);
             bylineView.setText(Html.fromHtml(
                     DateUtils.getRelativeTimeSpanString(
                             mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
@@ -201,14 +203,13 @@ public class ArticleDetailFragment extends Fragment implements
                             + mCursor.getString(ArticleLoader.Query.AUTHOR)
                             + "</font>"));
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)));
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
-                                //Palette p = Palette.generate(bitmap, 12);
-
                                 Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                                     @SuppressWarnings("ResourceType")
                                     @Override
@@ -222,10 +223,12 @@ public class ArticleDetailFragment extends Fragment implements
                                 });
 
                                 mRootView.findViewById(R.id.meta_bar).setBackgroundColor(mMutedColor);
-
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 updateStatusBar();
 
+                            } else {
+
+                                mPhotoView.setImageResource(R.drawable.empty_detail);
                             }
                         }
 
