@@ -8,10 +8,9 @@ repositories {
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
-
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 22
+        minSdkVersion 21
+        targetSdkVersion 24
         vectorDrawables.useSupportLibrary = true
     }
 }

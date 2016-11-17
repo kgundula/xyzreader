@@ -22,6 +22,7 @@
     <color name="theme_accent">#FF4081</color>
     <color name="ltgray">#ffE0E0E0</color>
     <color name="text_color">#FFFFFF</color>
+    <color name="white">#fff</color>
     <color name="light_primary_color">#FFCCBC</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>

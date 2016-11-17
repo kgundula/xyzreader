@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
@@ -10,8 +11,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
@@ -20,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -35,7 +40,7 @@ import butterknife.ButterKnife;
  * either contained in a {@link ArticleListActivity} in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
-public class ArticleDetailFragment extends RootFragment implements
+public class ArticleDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ArticleDetailFragment";
 
@@ -55,6 +60,9 @@ public class ArticleDetailFragment extends RootFragment implements
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     @BindView(R.id.photo)
     ImageView mPhotoView;
 
@@ -66,6 +74,12 @@ public class ArticleDetailFragment extends RootFragment implements
 
     @BindView(R.id.article_body)
     TextView bodyView;
+
+    @BindView(R.id.meta_bar)
+    LinearLayout metaBar;
+
+    @BindView(R.id.share_fab)
+    FloatingActionButton share_fab;
 
     private int mScrollY;
     private boolean mIsCard = false;
@@ -97,8 +111,7 @@ public class ArticleDetailFragment extends RootFragment implements
         }
 
         mIsCard = getResources().getBoolean(R.bool.detail_is_card);
-        mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
-                R.dimen.detail_card_top_margin);
+        mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(R.dimen.detail_card_top_margin);
         setHasOptionsMenu(true);
     }
 
@@ -115,6 +128,7 @@ public class ArticleDetailFragment extends RootFragment implements
         // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
         // we do this in onActivityCreated.
         getLoaderManager().initLoader(0, null, this);
+
     }
 
     @Override
@@ -122,20 +136,20 @@ public class ArticleDetailFragment extends RootFragment implements
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, mRootView);
-        /*
-        mDrawInsetsFrameLayout = (DrawInsetsFrameLayout) mRootView.findViewById(R.id.draw_insets_frame_layout);
-        mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        mToolbar.setTitle(share_title);
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+
+        // back navigation: http://stackoverflow.com/questions/27230827/back-button-using-getsupportactionbar-and-appcompat-v7-toolbar
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onInsetsChanged(Rect insets) {
-                mTopInset = insets.top;
+            public void onClick(View view) {
+                getActivity().onBackPressed();
             }
         });
-        */
-
-
         mStatusBarColorDrawable = new ColorDrawable(0);
 
-        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
+        share_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
@@ -162,7 +176,6 @@ public class ArticleDetailFragment extends RootFragment implements
                     (int) (Color.blue(mMutedColor) * 0.9));
         }
         mStatusBarColorDrawable.setColor(color);
-        //mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
     }
 
     static float progress(float v, float min, float max) {
@@ -189,11 +202,16 @@ public class ArticleDetailFragment extends RootFragment implements
 
 
         if (mCursor != null) {
+
+
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
             share_title = mCursor.getString(ArticleLoader.Query.TITLE);
             titleView.setText(share_title);
+            mToolbar.setTitle(share_title);
+
+
             bylineView.setText(Html.fromHtml(
                     DateUtils.getRelativeTimeSpanString(
                             mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
@@ -219,16 +237,16 @@ public class ArticleDetailFragment extends RootFragment implements
                                         int vibrantDarkColor = palette.getDarkVibrantColor(R.color.theme_primary);
                                         collapsingToolbarLayout.setContentScrimColor(vibrantColor);
                                         collapsingToolbarLayout.setStatusBarScrimColor(vibrantDarkColor);
+                                        metaBar.setBackgroundColor(mMutedColor);
+
                                     }
                                 });
 
-                                mRootView.findViewById(R.id.meta_bar).setBackgroundColor(mMutedColor);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 updateStatusBar();
 
                             } else {
-
-                                mPhotoView.setImageResource(R.drawable.empty_detail);
+                                //mPhotoView.setImageResource(R.drawable.empty_detail);
                             }
                         }
 
@@ -237,16 +255,15 @@ public class ArticleDetailFragment extends RootFragment implements
 
                         }
                     });
+
+
         } else {
-            mRootView.setVisibility(View.GONE);
+            //mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
             bylineView.setText("N/A" );
             bodyView.setText("N/A");
         }
 
-        /*
-
-        */
     }
 
     @Override
@@ -278,16 +295,4 @@ public class ArticleDetailFragment extends RootFragment implements
         bindViews();
     }
 
-    /*
-    public int getUpButtonFloor() {
-        if (mPhotoContainerView == null || mPhotoView.getHeight() == 0) {
-            return Integer.MAX_VALUE;
-        }
-
-        // account for parallax
-        return mIsCard
-                ? (int) mPhotoContainerView.getTranslationY() + mPhotoView.getHeight() - mScrollY
-                : mPhotoView.getHeight() - mScrollY;
-    }
-    */
 }
