@@ -1,6 +1,5 @@
 package com.example.xyzreader.ui;
 
-import android.app.ActivityOptions;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,7 +15,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +65,7 @@ public class ArticleListActivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -157,12 +154,12 @@ public class ArticleListActivity extends ActionBarActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DynamicHeightNetworkImageView thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-
+                    //DynamicHeightNetworkImageView thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
                     //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(ArticleListActivity.this, (View) thumbnailView, getResources().getString(R.string.article_title_transition));
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this);
+                    //ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this);
                     Intent intent = new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition())));
-                    startActivity(intent, options.toBundle());
+                    //startActivity(intent, options.toBundle());
+                    startActivity(intent);
                 }
             });
             return vh;
@@ -190,18 +187,17 @@ public class ArticleListActivity extends ActionBarActivity implements
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        DynamicHeightNetworkImageView thumbnailView;
 
         @BindView(R.id.article_title)
         TextView titleView;
-
         @BindView(R.id.article_subtitle)
         TextView subtitleView;
+        @BindView(R.id.thumbnail)
+        DynamicHeightNetworkImageView thumbnailView;
 
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }
