@@ -8,6 +8,15 @@
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:windowContentTransitions">true</item>
+
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/details_window_enter_transition
+        </item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/details_window_exit_transition
+        </item>
+
+        <item name="android:windowExitTransition">@transition/grid_exit</item>
     </style>
 
     <style name="Theme.Bacon.Detail" parent="Theme.Bacon">

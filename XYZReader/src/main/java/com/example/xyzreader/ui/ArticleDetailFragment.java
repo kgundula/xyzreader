@@ -245,7 +245,7 @@ public class ArticleDetailFragment extends Fragment implements
                                 updateStatusBar();
 
                             } else {
-                                //mPhotoView.setImageResource(R.drawable.empty_detail);
+                                mPhotoView.setImageResource(R.drawable.empty_detail);
                             }
                         }
 
@@ -257,7 +257,7 @@ public class ArticleDetailFragment extends Fragment implements
 
 
         } else {
-            //mRootView.setVisibility(View.GONE);
+            mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
             bylineView.setText("N/A" );
             bodyView.setText("N/A");
