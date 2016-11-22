@@ -126,10 +126,8 @@
         android:layout_marginStart="@dimen/fab_margin"
         android:clickable="true"
         android:contentDescription="@string/action_share"
-        android:elevation="@dimen/fab_elevation"
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|right|end"
-        app:pressedTranslationZ="@dimen/fab_press_translation_z"
         android:stateListAnimator="@animator/fab_state_list_anim"
         app:srcCompat="@drawable/ic_share" />
 
