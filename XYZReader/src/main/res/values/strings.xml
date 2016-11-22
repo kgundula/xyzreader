@@ -9,5 +9,6 @@
 
     <string name="up">Up</string>
     <string name="article_title_transition">article_title_transition</string>
+    <string name="article_image_transition">article_image_transition</string>
     <string name="parallax_image">Parallax Image</string>
 </resources>

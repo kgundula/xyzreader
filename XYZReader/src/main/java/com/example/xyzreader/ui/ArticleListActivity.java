@@ -8,8 +8,9 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +36,7 @@ import butterknife.ButterKnife;
  * touched, lead to a {@link ArticleDetailActivity} representing item details. On tablets, the
  * activity presents a grid of items as cards.
  */
-public class ArticleListActivity extends ActionBarActivity implements
+public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.toolbar)
@@ -55,6 +56,9 @@ public class ArticleListActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
         ButterKnife.bind(this);
+
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
 
         getLoaderManager().initLoader(0, null, this);
 
@@ -154,12 +158,10 @@ public class ArticleListActivity extends ActionBarActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //DynamicHeightNetworkImageView thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-                    //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(ArticleListActivity.this, (View) thumbnailView, getResources().getString(R.string.article_title_transition));
-                    //ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this);
+                    DynamicHeightNetworkImageView thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(ArticleListActivity.this, thumbnailView, getResources().getString(R.string.article_image_transition));
                     Intent intent = new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition())));
-                    //startActivity(intent, options.toBundle());
-                    startActivity(intent);
+                    startActivity(intent, options.toBundle());
                 }
             });
             return vh;

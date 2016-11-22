@@ -2,5 +2,5 @@
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
     <explode
         android:duration="@integer/anim_duration_very_long"
-        android:interpolator="@android:interpolator/cycle" />
+        android:interpolator="@android:interpolator/accelerate_decelerate" />
 </transitionSet>

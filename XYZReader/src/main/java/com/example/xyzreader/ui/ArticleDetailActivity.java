@@ -14,8 +14,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.WindowInsetsCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,15 +51,6 @@ public class ArticleDetailActivity extends AppCompatActivity
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
-        /*Slide slide = new Slide(Gravity.BOTTOM);
-        slide.addTarget(R.id.article_subtitle);
-        slide.setInterpolator(AnimationUtils.loadInterpolator(this, android.R.interpolator.linear_out_slow_in));
-        slide.setDuration(slideDuration);
-        getWindow().setEnterTransition(slide);
-        */
-        Transition enterTransition = TransitionInflater.from(this).inflateTransition(R.transition.explode);
-        getWindow().setEnterTransition(enterTransition);
-
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
 

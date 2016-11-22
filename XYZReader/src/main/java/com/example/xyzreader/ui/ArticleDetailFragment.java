@@ -227,6 +227,7 @@ public class ArticleDetailFragment extends Fragment implements
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
+                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                                     @SuppressWarnings("ResourceType")
                                     @Override
@@ -241,7 +242,6 @@ public class ArticleDetailFragment extends Fragment implements
                                     }
                                 });
 
-                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 updateStatusBar();
 
                             } else {
@@ -257,7 +257,6 @@ public class ArticleDetailFragment extends Fragment implements
 
 
         } else {
-            mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
             bylineView.setText("N/A" );
             bodyView.setText("N/A");
