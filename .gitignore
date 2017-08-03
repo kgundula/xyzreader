@@ -60,3 +60,6 @@ captures/
 /.gradle/
 /build/
 /XYZReader/build/
+
+.idea/instapk.xml
+instapk.log*
